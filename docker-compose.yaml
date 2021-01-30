@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  primary:
+    image: postgres:13
+    volumes:
+      - ./primary:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: admin
+      POSTGRES_DB: primary
+    networks:
+      db:
+        ipv4_address: 192.168.160.2
+
+  secondary:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: admin
+      POSTGRES_DB: secondary
+    networks:
+      db:
+        ipv4_address: 192.168.160.3
+
+networks:
+  db:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.160.0/24
+
