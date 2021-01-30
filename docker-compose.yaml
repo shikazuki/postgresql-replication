@@ -4,6 +4,7 @@ services:
   primary:
     image: postgres:13
     volumes:
+      - master:/var/lib/postgresql/data
       - ./primary:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_PASSWORD: example
@@ -15,6 +16,9 @@ services:
 
   secondary:
     image: postgres:13
+    volumes:
+      - backup:/var/lib/postgresql/data
+      - ./secondary:/backup
     environment:
       POSTGRES_PASSWORD: example
       POSTGRES_USER: admin
@@ -31,3 +35,6 @@ networks:
       config:
         - subnet: 192.168.160.0/24
 
+volumes:
+  master:
+  backup:
